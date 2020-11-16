@@ -121,12 +121,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!4 &658841634 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2825023213786921385, guid: 67ad8e2d56c962f4f9495c2cccdd07c8,
-    type: 3}
-  m_PrefabInstance: {fileID: 3288671829056241889}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2064159393
 GameObject:
   m_ObjectHideFlags: 0
@@ -179,28 +173,18 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2825023213786921385, guid: 67ad8e2d56c962f4f9495c2cccdd07c8,
         type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2825023213786921385, guid: 67ad8e2d56c962f4f9495c2cccdd07c8,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2825023213786921385, guid: 67ad8e2d56c962f4f9495c2cccdd07c8,
-        type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2825023213786921385, guid: 67ad8e2d56c962f4f9495c2cccdd07c8,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
+      value: -0.09541142
       objectReference: {fileID: 0}
     - target: {fileID: 2825023213786921385, guid: 67ad8e2d56c962f4f9495c2cccdd07c8,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: -10.95
+      objectReference: {fileID: 0}
+    - target: {fileID: 2825023213786921385, guid: 67ad8e2d56c962f4f9495c2cccdd07c8,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9954379
       objectReference: {fileID: 0}
     - target: {fileID: 3288671829592624004, guid: 67ad8e2d56c962f4f9495c2cccdd07c8,
         type: 3}
@@ -220,22 +204,22 @@ PrefabInstance:
     - target: {fileID: 3288671829592624004, guid: 67ad8e2d56c962f4f9495c2cccdd07c8,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3288671829592624004, guid: 67ad8e2d56c962f4f9495c2cccdd07c8,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3288671829592624004, guid: 67ad8e2d56c962f4f9495c2cccdd07c8,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: -0.67880076
       objectReference: {fileID: 0}
     - target: {fileID: 3288671829592624004, guid: 67ad8e2d56c962f4f9495c2cccdd07c8,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7343225
       objectReference: {fileID: 0}
     - target: {fileID: 3288671829592624004, guid: 67ad8e2d56c962f4f9495c2cccdd07c8,
         type: 3}
@@ -255,37 +239,12 @@ PrefabInstance:
     - target: {fileID: 3288671829592624004, guid: 67ad8e2d56c962f4f9495c2cccdd07c8,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: -85.5
       objectReference: {fileID: 0}
     - target: {fileID: 3288671829592624005, guid: 67ad8e2d56c962f4f9495c2cccdd07c8,
         type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 3288671829592624007, guid: 67ad8e2d56c962f4f9495c2cccdd07c8,
-        type: 3}
-      propertyPath: particleObject
-      value: 
-      objectReference: {fileID: 658841634}
-    - target: {fileID: 3288671829592624007, guid: 67ad8e2d56c962f4f9495c2cccdd07c8,
-        type: 3}
-      propertyPath: rotationSpeed
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 7291979421949927576, guid: 67ad8e2d56c962f4f9495c2cccdd07c8,
-        type: 3}
-      propertyPath: ClampVelocityModule.enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7291979421949927576, guid: 67ad8e2d56c962f4f9495c2cccdd07c8,
-        type: 3}
-      propertyPath: VelocityModule.enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7291979421949927576, guid: 67ad8e2d56c962f4f9495c2cccdd07c8,
-        type: 3}
-      propertyPath: VelocityModule.inWorldSpace
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67ad8e2d56c962f4f9495c2cccdd07c8, type: 3}

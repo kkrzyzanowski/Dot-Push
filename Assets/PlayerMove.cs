@@ -77,8 +77,12 @@ public class PlayerMove : MonoBehaviour
         if(setDefaultState == false)
     
         {
-            Vector3 normalizedDir = new Vector3(dirMovement.x, dirMovement.y, 0.0f);
-            particleObject.Rotate(new Vector3(0.0f, 0.0f, Vector3.Angle(Vector3.up, dirMovement.normalized * -1.0f)));
+            float particleAngle = Vector3.SignedAngle(Vector3.up, dirMovement.normalized, Vector3.forward) * -1.0f;
+            if (particleAngle > 0)
+                particleObject.Rotate(Vector3.forward, 180.0f - particleAngle);
+            else
+                particleObject.Rotate(Vector3.forward, -(particleAngle + 180.0f));
+            //Quaternion.Inverse(particleObject.rotation);
             setDefaultState = true;
         }
     }
