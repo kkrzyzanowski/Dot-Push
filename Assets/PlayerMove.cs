@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
+
     bool Touch { get; set; }
     bool setDefaultState;
     public float speed;
@@ -17,6 +18,8 @@ public class PlayerMove : MonoBehaviour
     float accelerationSpeed;
     Vector3 targetPos;
     Vector3 previousPos;
+    Vector3 newDirection;
+    Vector3 currentDirection;
     public static PlayerMove playerMoveInstance { get; private set; }
 
     private void Awake()
@@ -29,12 +32,12 @@ public class PlayerMove : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        moveSpeedX = UnityEngine.Random.Range(-1.0f, 1.0f) * speed * Time.deltaTime;
-        moveSpeedY = UnityEngine.Random.Range(-1.0f, 1.0f) * speed * Time.deltaTime;
+        GenerateMovement();
         distance = 0.0f;
         accelerationSpeed = speed;
         previousPos = Vector3.zero;
         setDefaultState = false;
+        currentDirection = Vector3.up;
     }
 
     // Update is called once per frame
@@ -42,21 +45,26 @@ public class PlayerMove : MonoBehaviour
     {
         if (Touch)
         {
-            setDefaultState = false;
             distance = (accelerationSpeed + acceleration) * Time.deltaTime;
             transform.position = Vector3.Lerp(transform.position, targetPos, distance);
-            particleObject.rotation = Quaternion.Lerp(particleObject.rotation, Quaternion.FromToRotation(transform.position, targetPos), rotationSpeed);
+            newDirection = transform.position - targetPos;
+            DefaultMovement();
+
             accelerationSpeed = distance;
             if(transform.position == targetPos)
             {
                 Touch = false;
+                setDefaultState = false;
+                GenerateMovement();
+                currentDirection = newDirection;
             }
         }
         else
         {
-            Vector3 dir = new Vector3(moveSpeedX, moveSpeedY, 0.0f);
-            transform.Translate(dir);
-            DefaultMovement(dir);
+            newDirection = new Vector3(moveSpeedX, moveSpeedY, 0.0f);
+            transform.Translate(newDirection);
+            DefaultMovement();
+            currentDirection = newDirection;
         }
 
     }
@@ -65,6 +73,7 @@ public class PlayerMove : MonoBehaviour
     {
         this.targetPos = targetPos;
         Touch = true;
+        setDefaultState = false;
     }
     public void DeactivateTouch()
     {
@@ -72,19 +81,24 @@ public class PlayerMove : MonoBehaviour
         Touch = false;
     }
 
-    void DefaultMovement(Vector3 dirMovement)
+    void DefaultMovement()
     {
-        if(setDefaultState == false)
-    
+       if(setDefaultState == false)
         {
-            float particleAngle = Vector3.SignedAngle(Vector3.up, dirMovement.normalized, Vector3.forward) * -1.0f;
+            float particleAngle = Vector3.SignedAngle(currentDirection, newDirection.normalized, Vector3.forward) * -1.0f;
             if (particleAngle > 0)
                 particleObject.Rotate(Vector3.forward, 180.0f - particleAngle);
             else
                 particleObject.Rotate(Vector3.forward, -(particleAngle + 180.0f));
-            //Quaternion.Inverse(particleObject.rotation);
             setDefaultState = true;
         }
+
+    }
+
+    void GenerateMovement()
+    {
+        moveSpeedX = UnityEngine.Random.Range(-1.0f, 1.0f) * speed * Time.deltaTime;
+        moveSpeedY = UnityEngine.Random.Range(-1.0f, 1.0f) * speed * Time.deltaTime;
     }
 
 }
