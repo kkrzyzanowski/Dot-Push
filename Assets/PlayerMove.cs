@@ -7,19 +7,18 @@ public class PlayerMove : MonoBehaviour
 {
 
     bool Touch { get; set; }
-    bool setDefaultState;
     public float speed;
-    public float acceleration;
+    public float acceleration = 1.0f;
     public Transform particleObject;
-    public float rotationSpeed;
+    public float rotationSpeed = 360.0f;
     float moveSpeedX;
     float moveSpeedY;
-    float distance;
-    float accelerationSpeed;
+    float distanceFactor;
+    float playerVelocity;
     Vector3 targetPos;
-    Vector3 previousPos;
     Vector3 newDirection;
     Vector3 currentDirection;
+    float newAngle;
     public static PlayerMove playerMoveInstance { get; private set; }
 
     private void Awake()
@@ -32,39 +31,34 @@ public class PlayerMove : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        distanceFactor = 0.0f;
         GenerateMovement();
-        distance = 0.0f;
-        accelerationSpeed = speed;
-        previousPos = Vector3.zero;
-        setDefaultState = false;
-        currentDirection = Vector3.up;
+        playerVelocity = speed;
+        currentDirection = newDirection;
+        InitializeParticleAngle();
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (Touch)
         {
-            distance = (accelerationSpeed + acceleration) * Time.deltaTime;
-            transform.position = Vector3.Lerp(transform.position, targetPos, distance);
-            newDirection = transform.position - targetPos;
-            DefaultMovement();
+            playerVelocity += acceleration * Time.deltaTime;
+            distanceFactor = playerVelocity * Time.deltaTime;
+            transform.position = Vector3.Lerp(transform.position, targetPos, distanceFactor);
+            
+            RotatePlayer();
 
-            accelerationSpeed = distance;
             if(transform.position == targetPos)
             {
                 Touch = false;
-                setDefaultState = false;
-                GenerateMovement();
+                playerVelocity = speed;
                 currentDirection = newDirection;
             }
         }
         else
         {
-            newDirection = new Vector3(moveSpeedX, moveSpeedY, 0.0f);
-            transform.Translate(newDirection);
-            DefaultMovement();
-            currentDirection = newDirection;
+            transform.Translate(currentDirection * playerVelocity * Time.deltaTime);
         }
 
     }
@@ -73,32 +67,33 @@ public class PlayerMove : MonoBehaviour
     {
         this.targetPos = targetPos;
         Touch = true;
-        setDefaultState = false;
+        newDirection = targetPos - transform.position;
+        
     }
     public void DeactivateTouch()
     {
-        distance = speed;
+        distanceFactor = speed;
         Touch = false;
     }
 
-    void DefaultMovement()
+    void RotatePlayer()
     {
-       if(setDefaultState == false)
-        {
-            float particleAngle = Vector3.SignedAngle(currentDirection, newDirection.normalized, Vector3.forward) * -1.0f;
-            if (particleAngle > 0)
-                particleObject.Rotate(Vector3.forward, 180.0f - particleAngle);
-            else
-                particleObject.Rotate(Vector3.forward, -(particleAngle + 180.0f));
-            setDefaultState = true;
-        }
+            newAngle = Mathf.Atan2(newDirection.normalized.y, newDirection.normalized.x) * Mathf.Rad2Deg - 90.0f;
+            particleObject.rotation = Quaternion.RotateTowards(particleObject.rotation, Quaternion.Euler(0.0f, 0.0f, newAngle), rotationSpeed * Time.deltaTime);   
+    }
 
+    void InitializeParticleAngle()
+    {
+        newAngle = Mathf.Atan2(newDirection.normalized.y, newDirection.normalized.x) * Mathf.Rad2Deg - 90.0f;
+        particleObject.rotation = Quaternion.Euler(0.0f, 0.0f, newAngle);
     }
 
     void GenerateMovement()
     {
         moveSpeedX = UnityEngine.Random.Range(-1.0f, 1.0f) * speed * Time.deltaTime;
         moveSpeedY = UnityEngine.Random.Range(-1.0f, 1.0f) * speed * Time.deltaTime;
+        newDirection = new Vector3(moveSpeedX, moveSpeedY, 0.0f).normalized;
+        playerVelocity = speed;
     }
 
 }

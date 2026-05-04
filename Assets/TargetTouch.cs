@@ -20,7 +20,7 @@ public class TargetTouch : MonoBehaviour
     {
         ray = cam.ScreenPointToRay(Input.mousePosition);
         Debug.DrawRay(ray.origin, ray.direction, Color.red);
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity) && Input.GetMouseButtonDown(0))
         {
             if (hit.transform == transform)
             {
