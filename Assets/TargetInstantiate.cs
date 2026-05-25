@@ -12,7 +12,7 @@ public class TargetInstantiate : MonoBehaviour
     bool wait;
     float xSpawn;
     float ySpawn;
-    List<Transform> spawners;
+    LinkedList<Transform> spawners;
     int entityCount;
     int uncatched;
     // Start is called before the first frame update
@@ -22,11 +22,24 @@ public class TargetInstantiate : MonoBehaviour
         spawnTime = 0.0f;
         interval = 1.0f;
         wait = false;
-        spawners = new List<Transform>();
+        spawners = new LinkedList<Transform>();
         ConfigurationGame.ConfigurationGameInstance.OnLevelChange += ConfigurationGameInstance_OnLevelChange;
         entityCount = (int)(allTimeSpawn / interval);
+        PreSpawn();
     }
 
+    private void PreSpawn()
+    {
+        for (int i = 0; i < entityCount; i++)
+        {
+            xSpawn = Random.Range(fieldCollider.bounds.min.x, fieldCollider.bounds.max.x);
+            ySpawn = Random.Range(fieldCollider.bounds.min.y, fieldCollider.bounds.max.y);
+            var newSpawner = Instantiate(spawner, new Vector3(xSpawn, ySpawn, fieldCollider.transform.position.z), Quaternion.identity);
+            newSpawner.SetActive(false);
+            spawners.AddLast(newSpawner.transform);
+        }
+        spawners.First.Value.gameObject.SetActive(true);
+    }
     private void ConfigurationGameInstance_OnLevelChange()
     {
         interval += 0.2f;
@@ -49,11 +62,17 @@ public class TargetInstantiate : MonoBehaviour
         {
             if (spawners.Count >= entityCount)
             {
-                if(spawners[0] != null)
+                var spawner = spawners.First.Value;
+                if(spawner != null)
                 {
-                    Destroy(spawners[0].gameObject);
+                    spawner.gameObject.SetActive(false);
                 }
-                spawners.RemoveAt(0);
+                spawners.RemoveFirst();
+                xSpawn = Random.Range(fieldCollider.bounds.min.x, fieldCollider.bounds.max.x);
+                ySpawn = Random.Range(fieldCollider.bounds.min.y, fieldCollider.bounds.max.y);
+                spawner.position = new Vector3(xSpawn, ySpawn, fieldCollider.transform.position.z);
+                spawner.gameObject.SetActive(true);
+                spawners.AddLast(spawner);
                 uncatched++;
             }
             ConfigurationGame.ConfigurationGameInstance.CheckGameOver((float)uncatched, (float)allTimeSpawn);
@@ -61,10 +80,6 @@ public class TargetInstantiate : MonoBehaviour
             Debug.Log("Time: " + spawnTime);
             yield return new WaitForSeconds(interval);
             spawnTime += interval;
-            xSpawn = Random.Range(fieldCollider.bounds.min.x, fieldCollider.bounds.max.x);
-            ySpawn = Random.Range(fieldCollider.bounds.min.y, fieldCollider.bounds.max.y);
-            spawners.Add(Instantiate(spawner.transform, new Vector3(xSpawn, ySpawn, fieldCollider.transform.position.z),
-            Quaternion.Euler(Vector3.zero)));
             wait = false;
         }
         else
