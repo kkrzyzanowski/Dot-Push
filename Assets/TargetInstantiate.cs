@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.Linq;
 public class TargetInstantiate : MonoBehaviour
 {
     public Collider fieldCollider;
@@ -15,6 +15,7 @@ public class TargetInstantiate : MonoBehaviour
     LinkedList<Transform> spawners;
     int entityCount;
     int uncatched;
+    bool spawnAllowed;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +23,7 @@ public class TargetInstantiate : MonoBehaviour
         spawnTime = 0.0f;
         interval = 1.0f;
         wait = false;
+        
         spawners = new LinkedList<Transform>();
         ConfigurationGame.ConfigurationGameInstance.OnLevelChange += ConfigurationGameInstance_OnLevelChange;
         entityCount = (int)(allTimeSpawn / interval);
@@ -38,6 +40,7 @@ public class TargetInstantiate : MonoBehaviour
             newSpawner.SetActive(false);
             spawners.AddLast(newSpawner.transform);
         }
+        spawnAllowed = true;
         spawners.First.Value.gameObject.SetActive(true);
     }
     private void ConfigurationGameInstance_OnLevelChange()
@@ -58,7 +61,7 @@ public class TargetInstantiate : MonoBehaviour
 
     IEnumerator Spawn()
     {
-        if (spawnTime <= allTimeSpawn)
+        if (spawnTime <= allTimeSpawn && spawnAllowed)
         {
             if (spawners.Count >= entityCount)
             {
@@ -84,7 +87,15 @@ public class TargetInstantiate : MonoBehaviour
         }
         else
         {
-            spawnTime = 0.0f;
+            if(spawners.Any(s => s.gameObject.activeSelf == false))
+            {
+                spawnTime = 0.0f;
+                spawnAllowed = true;
+            }
+            else
+            {
+                spawnAllowed = false;
+            }
         }
     }
 

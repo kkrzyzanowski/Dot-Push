@@ -7,7 +7,7 @@ public class PlayerMove : MonoBehaviour
 {
 
     bool Touch { get; set; }
-    public float speed;
+    public float speed = .5f;
     public float acceleration = 1.0f;
     public Transform particleObject;
     public float rotationSpeed = 360.0f;
@@ -19,6 +19,8 @@ public class PlayerMove : MonoBehaviour
     Vector3 newDirection;
     Vector3 currentDirection;
     float newAngle;
+    float currentMagnitude;
+    Vector3 currentPos;
     public static PlayerMove playerMoveInstance { get; private set; }
 
     private void Awake()
@@ -46,10 +48,10 @@ public class PlayerMove : MonoBehaviour
             playerVelocity += acceleration * Time.deltaTime;
             distanceFactor = playerVelocity * Time.deltaTime;
             transform.position = Vector3.Lerp(transform.position, targetPos, distanceFactor);
-            
+            currentMagnitude = (transform.position - currentPos).magnitude;
             RotatePlayer();
 
-            if(transform.position == targetPos)
+            if(currentMagnitude >= newDirection.magnitude - 0.1f)
             {
                 Touch = false;
                 playerVelocity = speed;
@@ -68,7 +70,7 @@ public class PlayerMove : MonoBehaviour
         this.targetPos = targetPos;
         Touch = true;
         newDirection = targetPos - transform.position;
-        
+        currentPos = transform.position;
     }
     public void DeactivateTouch()
     {
@@ -78,8 +80,8 @@ public class PlayerMove : MonoBehaviour
 
     void RotatePlayer()
     {
-            newAngle = Mathf.Atan2(newDirection.normalized.y, newDirection.normalized.x) * Mathf.Rad2Deg - 90.0f;
-            particleObject.rotation = Quaternion.RotateTowards(particleObject.rotation, Quaternion.Euler(0.0f, 0.0f, newAngle), rotationSpeed * Time.deltaTime);   
+        newAngle = Mathf.Atan2(newDirection.normalized.y, newDirection.normalized.x) * Mathf.Rad2Deg - 90.0f;
+        particleObject.rotation = Quaternion.RotateTowards(particleObject.rotation, Quaternion.Euler(0.0f, 0.0f, newAngle), rotationSpeed * Time.deltaTime);   
     }
 
     void InitializeParticleAngle()

@@ -25,7 +25,7 @@ public class TargetTouch : MonoBehaviour
             if (hit.transform == transform)
             {
                 PlayerMove.playerMoveInstance.ActiveTouch(transform.position);
-                Destroy(this.gameObject);
+                this.gameObject.SetActive(false);
                 ConfigurationGame.ConfigurationGameInstance.AddPoints();
             }
         }
