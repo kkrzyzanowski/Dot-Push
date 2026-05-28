@@ -54,9 +54,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets/ConfigurationGame.cs" />
-    <Compile Include="Assets/TargetInstantiate.cs" />
+    <Compile Include="Assets/SpawnManager.cs" />
     <Compile Include="Assets/PlayerMove.cs" />
-    <Compile Include="Assets/TargetTouch.cs" />
+    <Compile Include="Assets/DefaultSpawner.cs" />
+    <Compile Include="Assets/Spawner.cs" />
+    <Compile Include="Assets/FakeSpawner.cs" />
+    <Compile Include="Assets/SpawnPool.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

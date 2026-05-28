@@ -47,11 +47,11 @@ public class PlayerMove : MonoBehaviour
         {
             playerVelocity += acceleration * Time.deltaTime;
             distanceFactor = playerVelocity * Time.deltaTime;
-            transform.position = Vector3.Lerp(transform.position, targetPos, distanceFactor);
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, distanceFactor);
             currentMagnitude = (transform.position - currentPos).magnitude;
             RotatePlayer();
 
-            if(currentMagnitude >= newDirection.magnitude - 0.1f)
+            if(currentMagnitude >= newDirection.magnitude)
             {
                 Touch = false;
                 playerVelocity = speed;

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -56,5 +57,10 @@ public class ConfigurationGame : MonoBehaviour
             if (percentage <= 0.3f)
                 Debug.Log("GameOver");
         }
+    }
+
+    internal void SubtractPoints()
+    {
+        points -= 10 * level;
     }
 }
