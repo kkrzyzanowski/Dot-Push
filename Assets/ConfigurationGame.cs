@@ -59,6 +59,11 @@ public class ConfigurationGame : MonoBehaviour
         }
     }
 
+    public string GetPoints()
+    {
+        return points.ToString();
+    }
+
     internal void SubtractPoints()
     {
         points -= 10 * level;

@@ -8,10 +8,11 @@ public abstract class Spawner : MonoBehaviour
     protected Ray ray;
     protected RaycastHit hit;
     protected Camera cam;
-
+    public float lifeTime = 5f;
     protected virtual void Start()
     {
         cam = Camera.main;
+        StartCoroutine(WaitForDisable());
     }
 
     protected virtual void Update()
@@ -24,11 +25,16 @@ public abstract class Spawner : MonoBehaviour
                 OnClicked();
             }
         }
+        if(!gameObject.activeSelf)
+        {
+
+        }
     }
 
     protected virtual void OnClicked()
     {
         ApplyEffect();
+        UIManager.UIManagerInstance.UpdateScore();
         gameObject.SetActive(false);
     }
 
@@ -41,5 +47,12 @@ public abstract class Spawner : MonoBehaviour
             player.DeactivateTouch();
             Debug.Log("Collider Enter");
         }
+    }
+
+    IEnumerator WaitForDisable()
+    {
+       
+        yield return new WaitForSeconds(lifeTime);
+        gameObject.SetActive(false);
     }
 }

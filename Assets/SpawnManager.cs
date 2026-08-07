@@ -16,7 +16,6 @@ public class SpawnManager : MonoBehaviour
     {
         uncatched = 0;
         
-        // Inicjalizacja wszystkich pul
         foreach (var pool in spawnPools)
         {
             pool.Initialize(this, fieldCollider, transform);

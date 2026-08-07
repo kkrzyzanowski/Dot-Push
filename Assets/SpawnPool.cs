@@ -60,9 +60,10 @@ public class SpawnPool
     {
         var next = instances.FirstOrDefault(s => !s.gameObject.activeSelf);
         if (next == null) return;
-        
+
         next.transform.position = GetRandomPosition();
         next.gameObject.SetActive(true);
+        coroutineOwner.StartCoroutine(WaitForDisable(next));
     }
 
     private Vector3 GetRandomPosition()
@@ -73,4 +74,11 @@ public class SpawnPool
             fieldCollider.transform.position.z
         );
     }
+
+    IEnumerator WaitForDisable(Spawner instance)
+    {
+        yield return new WaitForSeconds(instance.lifeTime);
+        instance.gameObject.SetActive(false);
+    }
+
 }
