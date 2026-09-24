@@ -11,6 +11,7 @@ public class PlayerMove : MonoBehaviour
     public float acceleration = 1.0f;
     public Transform particleObject;
     public float rotationSpeed = 360.0f;
+    public float lifeTime = 10.0f;
     float moveSpeedX;
     float moveSpeedY;
     float distanceFactor;
@@ -43,8 +44,14 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        lifeTime -= Time.deltaTime;
+        if (lifeTime < 0.0f)
+        {
+            this.gameObject.SetActive(false);
+        }
         if (Touch)
         {
+            lifeTime = 10.0f;
             playerVelocity += acceleration * Time.deltaTime;
             distanceFactor = playerVelocity * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, targetPos, distanceFactor);
@@ -55,7 +62,7 @@ public class PlayerMove : MonoBehaviour
             {
                 Touch = false;
                 playerVelocity = speed;
-                currentDirection = newDirection;
+                currentDirection = newDirection.normalized;
             }
         }
         else

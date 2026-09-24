@@ -35,6 +35,8 @@ public abstract class Spawner : MonoBehaviour
     {
         ApplyEffect();
         UIManager.UIManagerInstance.UpdateScore();
+        ConfigurationGame.ConfigurationGameInstance.AddClickedDotToList(this);
+        ConfigurationGame.ConfigurationGameInstance.CheckCombo();
         gameObject.SetActive(false);
     }
 
@@ -45,13 +47,11 @@ public abstract class Spawner : MonoBehaviour
         if (other.gameObject.TryGetComponent<PlayerMove>(out var player))
         {
             player.DeactivateTouch();
-            Debug.Log("Collider Enter");
         }
     }
 
     IEnumerator WaitForDisable()
     {
-       
         yield return new WaitForSeconds(lifeTime);
         gameObject.SetActive(false);
     }
